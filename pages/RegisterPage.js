@@ -8,7 +8,7 @@ export default class RegisterPage {
         this.page = page;
 
         // Element Locators
-        this.pageTitle = page.getByRole('heading', { name: 'Register' });
+        this.pageHeading = page.getByRole('heading', { name: 'Register' });
         this.genderMaleRadio = page.getByLabel('Male', { exact: true });
         this.genderFemaleRadio = page.getByLabel('Female', { exact: true });
         this.firstNameInput = page.locator('#FirstName');
