@@ -50,6 +50,7 @@ export default class RegisterPage {
         await this.emailInput.fill(email);
         if (company) await this.companyNameInput.fill(company);
         await this.passwordInput.fill(password);
+        await this.confirmPassInput.click();
         await this.confirmPassInput.fill(confirmPassword);
     }
 
