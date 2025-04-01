@@ -41,7 +41,7 @@ test.describe('RegisterPage UI Tests', () => {
         await registerPage.submitForm();
         await expect(registerPage.passwordValidationError).toBeVisible();
         await expect(registerPage.confirmPasswordMismatchError).toBeVisible();
-    })
+    });
 
     test('Verify successful user registration', async ({ page }) => {
         await registerPage.selectGender('male');
@@ -59,5 +59,18 @@ test.describe('RegisterPage UI Tests', () => {
         // Not working in Playwright - Registration gets completed but no redirection to successful page
         // const successMsg = await registerPage.getSuccessMessage();
         // expect(successMsg).toBe('Your registration completed');
+    });
+
+    test('Test should fail', async () => {
+        await registerPage.fillRegistrationForm(
+            'User',
+            'Tanmay',
+            `john.doe@mail.com`,
+            'pass',
+            'passw'
+        );
+        await registerPage.submitForm();
+        await expect(registerPage.passwordValidationError).not.toBeVisible({ timeout: 5000 });
+        await expect(registerPage.confirmPasswordMismatchError).toBeVisible();
     });
 });
