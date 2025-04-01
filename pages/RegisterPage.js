@@ -21,11 +21,14 @@ export default class RegisterPage {
         this.registerButton = page.locator('#register-button');
 
         // Error Messages
-        this.firstNameError = page.locator('#FirstName-error', { hasText: 'First name is required' });
-        this.lastNameError = page.locator('#LastName-error', { hasText: 'Last name is required' });
-        this.emailError = page.locator('#Email-error', { hasText: 'Please enter a valid email address' });
-        this.passwordValidationError = page.locator('#Password-error', { hasText: 'Password must meet the following rules:  must have at least 6 characters and not greater than 64 characters' });
-        this.confirmPasswordError = page.locator('#ConfirmPassword-error', { hasText: 'Password is required' });
+        this.firstNameError = page.locator('.field-validation-error', { hasText: 'First name is required' });
+        this.lastNameError = page.locator('.field-validation-error', { hasText: 'Last name is required' });
+        this.emailValidationError = page.locator('.field-validation-error', { hasText: 'Please enter a valid email address' });
+        this.emailEmptyError = page.locator('.field-validation-error', { hasText: 'Email is required' });
+        this.passwordValidationError = page.locator('.field-validation-error', { hasText: 'Password must meet the following rules:  must have at least 6 characters and not greater than 64 characters' });
+        this.passwordEmptyError = page.locator('[data-valmsg-for="Password"]', { hasText: 'Password is required' });
+        this.confirmPasswordEmptyError = page.locator('[data-valmsg-for="ConfirmPassword"]', { hasText: 'Password is required' });
+        this.confirmPasswordMismatchError = page.locator('[data-valmsg-for="ConfirmPassword"]', { hasText: 'The password and confirmation password do not match' });
     }
 
     // Navigate to the registration page
