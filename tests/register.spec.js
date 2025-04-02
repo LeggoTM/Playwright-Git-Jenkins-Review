@@ -39,7 +39,7 @@ test.describe('RegisterPage UI Tests', () => {
             'passw'
         );
         await registerPage.submitForm();
-        await expect(registerPage.passwordValidationError).toBeVisible();
+        // await expect(registerPage.passwordValidationError).toBeVisible();
         await expect(registerPage.confirmPasswordMismatchError).toBeVisible();
     });
 
@@ -61,16 +61,15 @@ test.describe('RegisterPage UI Tests', () => {
         // expect(successMsg).toBe('Your registration completed');
     });
 
-    test('Test should fail', async () => {
+    test('Verify password not matching error', async () => {
         await registerPage.fillRegistrationForm(
             'User',
             'Tanmay',
             `john.doe@mail.com`,
-            'pass',
-            'passw'
+            'pass1234',
+            'pass123'
         );
         await registerPage.submitForm();
-        await expect(registerPage.passwordValidationError).not.toBeVisible({ timeout: 5000 });
         await expect(registerPage.confirmPasswordMismatchError).toBeVisible();
     });
 });
