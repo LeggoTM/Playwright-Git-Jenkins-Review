@@ -1,6 +1,68 @@
 pipeline {
-    agent linux-agent
+    agent none
+    tools {
+        nodejs 'NodeJS 22'
+    }
     stages {
-        // stages will be added here
+        stage('Build and Test') {
+            parallel {
+                stage('Chromium Tests on Linux') {
+                    agent { label 'linux-agent' }
+                    environment {
+                        BROWSER = 'chromium'
+                    }
+                    steps {
+                        checkout scm
+                        sh 'npm install'
+                        sh 'npx playwright install --with-deps'
+                        sh 'npx playwright test --project=chromium'
+                    }
+                    post {
+                        always {
+                            junit 'test-results/chromium/*.xml'
+                            archiveArtifacts artifacts: 'playwright-report/chromium/**/*', allowEmptyArchive: true
+                        }
+                    }
+                }
+                stage('Firefox Tests on Windows') {
+                    agent { label 'win11-agent' }
+                    environment {
+                        BROWSER = 'firefox'
+                    }
+                    steps {
+                        checkout scm
+                        bat 'npm install'
+                        bat 'npx playwright install --with-deps'
+                        bat 'npx playwright test --project=firefox'
+                    }
+                    post {
+                        always {
+                            junit 'test-results/firefox/*.xml'
+                            archiveArtifacts artifacts: 'playwright-report/firefox/**/*', allowEmptyArchive: true
+                        }
+                    }
+                }
+            }
+        }
+    }
+    post {
+        always {
+            publishHTML(target: [
+                allowMissing: true,
+                alwaysLinkToLastBuild: true,
+                keepAll: true,
+                reportDir: 'playwright-report/chromium',
+                reportFiles: 'index.html',
+                reportName: 'Chromium Test Report'
+            ])
+            publishHTML(target: [
+                allowMissing: true,
+                alwaysLinkToLastBuild: true,
+                keepAll: true,
+                reportDir: 'playwright-report/firefox',
+                reportFiles: 'index.html',
+                reportName: 'Firefox Test Report'
+            ])
+        }
     }
 }
