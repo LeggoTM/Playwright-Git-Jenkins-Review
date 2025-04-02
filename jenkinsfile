@@ -1,19 +1,18 @@
 pipeline {
     agent none
-    tools {
-        nodejs 'NodeJS 22'
-    }
     stages {
         stage('Build and Test') {
             parallel {
-                stage('Chromium Tests on Linux') {
-                    agent { label 'linux-agent' }
-       
+                stage('Chromium Tests') {
+                    agent { label 'win11-agent' }
+                    environment {
+                        BROWSER = 'chromium'
+                    }
                     steps {
                         git branch: 'main', url: 'https://github.com/LeggoTM/Playwright-Git-Jenkins-Review.git'
-                        sh 'npm ci'
-                        sh 'npx playwright install --with-deps'
-                        sh 'npx playwright test --project=chromium'
+                        bat 'npm ci'
+                        bat 'npx playwright install --with-deps'
+                        bat 'npx playwright test --project=chromium'
                     }
                     post {
                         always {
@@ -22,7 +21,7 @@ pipeline {
                         }
                     }
                 }
-                stage('Firefox Tests on Windows') {
+                stage('Firefox Tests') {
                     agent { label 'win11-agent' }
                     environment {
                         BROWSER = 'firefox'
@@ -45,24 +44,24 @@ pipeline {
     }
     post {
         always {
-          node (master) {
-            publishHTML(target: [
-                allowMissing: true,
-                alwaysLinkToLastBuild: true,
-                keepAll: true,
-                reportDir: 'playwright-report/chromium',
-                reportFiles: 'index.html',
-                reportName: 'Chromium Test Report'
-            ])
-            publishHTML(target: [
-                allowMissing: true,
-                alwaysLinkToLastBuild: true,
-                keepAll: true,
-                reportDir: 'playwright-report/firefox',
-                reportFiles: 'index.html',
-                reportName: 'Firefox Test Report'
-            ])
-          }
+            node('built-in') {  // Use 'built-in' for the controller node; adjust if needed
+                publishHTML(target: [
+                    allowMissing: true,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: 'playwright-report/chromium',
+                    reportFiles: 'index.html',
+                    reportName: 'Chromium Test Report'
+                ])
+                publishHTML(target: [
+                    allowMissing: true,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: 'playwright-report/firefox',
+                    reportFiles: 'index.html',
+                    reportName: 'Firefox Test Report'
+                ])
+            }
         }
     }
 }
