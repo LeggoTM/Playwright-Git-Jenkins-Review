@@ -10,7 +10,7 @@ pipeline {
                     agent { label 'linux-agent' }
        
                     steps {
-                        checkout scm
+                        git branch: 'main', url: 'https://github.com/LeggoTM/Playwright-Git-Jenkins-Review.git'
                         sh 'npm ci'
                         sh 'npx playwright install --with-deps'
                         sh 'npx playwright test --project=chromium'
@@ -28,7 +28,7 @@ pipeline {
                         BROWSER = 'firefox'
                     }
                     steps {
-                        checkout scm
+                        git branch: 'main', url: 'https://github.com/LeggoTM/Playwright-Git-Jenkins-Review.git'
                         bat 'npm ci'
                         bat 'npx playwright install --with-deps'
                         bat 'npx playwright test --project=firefox'
@@ -45,6 +45,7 @@ pipeline {
     }
     post {
         always {
+          node (master) {
             publishHTML(target: [
                 allowMissing: true,
                 alwaysLinkToLastBuild: true,
@@ -61,6 +62,7 @@ pipeline {
                 reportFiles: 'index.html',
                 reportName: 'Firefox Test Report'
             ])
+          }
         }
     }
 }
