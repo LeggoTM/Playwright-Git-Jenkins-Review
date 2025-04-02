@@ -8,12 +8,10 @@ pipeline {
             parallel {
                 stage('Chromium Tests on Linux') {
                     agent { label 'linux-agent' }
-                    environment {
-                        BROWSER = 'chromium'
-                    }
+       
                     steps {
                         checkout scm
-                        sh 'npm install'
+                        sh 'npm ci'
                         sh 'npx playwright install --with-deps'
                         sh 'npx playwright test --project=chromium'
                     }
@@ -31,7 +29,7 @@ pipeline {
                     }
                     steps {
                         checkout scm
-                        bat 'npm install'
+                        bat 'npm ci'
                         bat 'npx playwright install --with-deps'
                         bat 'npx playwright test --project=firefox'
                     }
