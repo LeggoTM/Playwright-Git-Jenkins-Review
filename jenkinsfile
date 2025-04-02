@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent linux-agent
     stages {
         // stages will be added here
     }
