@@ -44,7 +44,7 @@ pipeline {
     }
     post {
         always {
-            node('built-in') {  // Use 'built-in' for the controller node; adjust if needed
+            node('win11-agent') {
                 publishHTML(target: [
                     allowMissing: true,
                     alwaysLinkToLastBuild: true,
