@@ -18,6 +18,14 @@ pipeline {
                         always {
                             junit 'test-results/chromium/*.xml'
                             archiveArtifacts artifacts: 'playwright-report/chromium/**/*', allowEmptyArchive: true
+                            publishHTML(target: [
+                                allowMissing: true,
+                                alwaysLinkToLastBuild: true,
+                                keepAll: true,
+                                reportDir: 'playwright-report/chromium',
+                                reportFiles: 'index.html',
+                                reportName: 'Chromium Test Report'
+                            ])
                         }
                     }
                 }
@@ -36,34 +44,18 @@ pipeline {
                         always {
                             junit 'test-results/firefox/*.xml'
                             archiveArtifacts artifacts: 'playwright-report/firefox/**/*', allowEmptyArchive: true
+                            publishHTML(target: [
+                                allowMissing: true,
+                                alwaysLinkToLastBuild: true,
+                                keepAll: true,
+                                reportDir: 'playwright-report/firefox',
+                                reportFiles: 'index.html',
+                                reportName: 'Firefox Test Report'
+                            ])
                         }
                     }
                 }
             }
         }
     }
-    post {
-        always {
-    node('win11-agent') {
-                publishHTML(target: [
-                    allowMissing: true,
-                    alwaysLinkToLastBuild: true,
-                    keepAll: true,
-                    reportDir: 'playwright-report/chromium',
-                    reportFiles: 'index.html',
-                    reportName: 'Chromium Test Report'
-                ])
-    }
-    node('win11-agent') {
-                publishHTML(target: [
-                    allowMissing: true,
-                    alwaysLinkToLastBuild: true,
-                    keepAll: true,
-                    reportDir: 'playwright-report/firefox',
-                    reportFiles: 'index.html',
-                    reportName: 'Firefox Test Report'
-                ])
-          }
-    }
-  }
 }
