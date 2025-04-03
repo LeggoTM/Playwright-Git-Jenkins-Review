@@ -44,7 +44,7 @@ pipeline {
     }
     post {
         always {
-    
+    node('win11-agent') {
                 publishHTML(target: [
                     allowMissing: true,
                     alwaysLinkToLastBuild: true,
@@ -53,6 +53,8 @@ pipeline {
                     reportFiles: 'index.html',
                     reportName: 'Chromium Test Report'
                 ])
+    }
+    node('win11-agent') {
                 publishHTML(target: [
                     allowMissing: true,
                     alwaysLinkToLastBuild: true,
@@ -61,7 +63,6 @@ pipeline {
                     reportFiles: 'index.html',
                     reportName: 'Firefox Test Report'
                 ])
-    
-        }
+          }
     }
 }
